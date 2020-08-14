@@ -1,9 +1,12 @@
-package fr.volax.valkyaclaims.tool;
+package fr.volax.valkyaclaims;
 
 
-import fr.volax.valkyaclaims.ValkyaClaims;
-import fr.volax.valkyaclaims.util.FileManager;
-
+/**
+ * ConfigBuilder pour gérer les configs
+ *
+ * @author Volax
+ * @see ConfigType
+ */
 public class ConfigBuilder {
     public static FileManager configs = new FileManager(ValkyaClaims.getInstance());
 
@@ -117,5 +120,22 @@ public class ConfigBuilder {
         ValkyaClaims.getInstance().getConfig().set(path, data);
         ValkyaClaims.getInstance().saveConfig();
         ValkyaClaims.getInstance().reloadConfig();
+    }
+
+    /**
+     * Tout les configs custom
+     *
+     * @author Volax
+     * @see ConfigBuilder
+     */
+    public enum ConfigType {
+        CHUNKS("chunks.yml");
+        public String configName;
+        ConfigType(String configName) {
+            this.configName = configName;
+        }
+        public String getConfigName() {
+            return configName;
+        }
     }
 }
