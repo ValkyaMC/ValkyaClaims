@@ -105,6 +105,9 @@ public class ChunkManager {
         Board.getInstance().removeAt(new FLocation(chunk.getWorld().getName(), chunk.getX(), chunk.getZ()));
         Board.getInstance().removeAt(new FLocation(secondChunk.getWorld().getName(), secondChunk.getX(), secondChunk.getZ()));
 
+        FPlayers.getInstance().getByOfflinePlayer(Bukkit.getOfflinePlayer("VolaxYT")).attemptClaim(Factions.getInstance().getWarZone(), new FLocation(chunk.getWorld().getName(), chunk.getX(), chunk.getZ()), true);
+        FPlayers.getInstance().getByOfflinePlayer(Bukkit.getOfflinePlayer("VolaxYT")).attemptClaim(Factions.getInstance().getWarZone(), new FLocation(secondChunk.getWorld().getName(), secondChunk.getX(), secondChunk.getZ()), true);
+
         try {
             PreparedStatement query = ValkyaClaims.getInstance().sql.connection.prepareStatement("DELETE FROM ap WHERE id=?");
             query.setInt(1, id);

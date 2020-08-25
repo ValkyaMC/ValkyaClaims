@@ -3,6 +3,7 @@ package fr.volax.valkyaclaims;
 import com.massivecraft.factions.*;
 import com.massivecraft.factions.event.FactionDisbandEvent;
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -33,7 +34,7 @@ public class SignListener implements Listener {
                     if(e.getLine(1) == null || e.getLine(1).equals(" ")
                             || e.getLine(2) == null || e.getLine(2).equals(" ")
                             || !ValkyaClaims.getInstance().isInt(e.getLine(2))){
-                        e.getPlayer().sendMessage(ValkyaClaims.getPREFIX() + " §eSetup une pancarte: \n" + ValkyaClaims.getPREFIX() + " §eLigne 1 : [ValkyaAP]\n" + ValkyaClaims.getPREFIX() + " §eLigne 2: La sortie de l'AP (NORD|SUD|EST|OUEST)\n" + ValkyaClaims.getPREFIX() + " §eLigne 3: Le prix de l'AP");
+                        e.getPlayer().sendMessage(ValkyaClaims.getPREFIX() + " §eSetup une pancarte: \n" + ValkyaClaims.getPREFIX() + " §eLigne 1 : ValkyaAP\n" + ValkyaClaims.getPREFIX() + " §eLigne 2: La sortie de l'AP (NORD|SUD|EST|OUEST)\n" + ValkyaClaims.getPREFIX() + " §eLigne 3: Le prix de l'AP (0 si gratuit)");
                         e.setCancelled(true);
                         b.breakNaturally();
                         return;
@@ -46,16 +47,19 @@ public class SignListener implements Listener {
                     e.setLine(3, "§6=-=-=-=-=-=-=-=-");
 
                     Chunk chunk = sign.getChunk();
+
                     switch (sortie){
                         case "NORD":
                         case "SUD":
                         case "EST":
                         case "OUEST":
+                            Location firtBedrock = new Location(b.getWorld(), b.getX(), b.getY() - 1, b.getZ());
+                            b.getWorld().getBlockAt(firtBedrock).setType(Material.BEDROCK);
                             ChunkManager.registerChunk(chunk, sortie, price, player);
                             e.getPlayer().sendMessage(ValkyaClaims.getPREFIX() + " §eVous avez créer avec succès une pancarte AP à la sortie §6" + sortie + " §epour le prix de §6" + price);
                             break;
                         default:
-                            e.getPlayer().sendMessage(ValkyaClaims.getPREFIX() + " §eSetup une pancarte: \n" + ValkyaClaims.getPREFIX() + " §eLigne 1 : [ValkyaAP]\n" + ValkyaClaims.getPREFIX() + " §eLigne 2: La sortie de l'AP (NORD|SUD|EST|OUEST)\n" + ValkyaClaims.getPREFIX() + " §eLigne 3: Le prix de l'AP");
+                            e.getPlayer().sendMessage(ValkyaClaims.getPREFIX() + " §eSetup une pancarte: \n" + ValkyaClaims.getPREFIX() + " §eLigne 1 : ValkyaAP\n" + ValkyaClaims.getPREFIX() + " §eLigne 2: La sortie de l'AP (NORD|SUD|EST|OUEST)\n" + ValkyaClaims.getPREFIX() + " §eLigne 3: Le prix de l'AP (0 si gratuit)");
                             e.setCancelled(true);
                             b.breakNaturally();
                             break;
@@ -73,7 +77,7 @@ public class SignListener implements Listener {
         Sign sign = (Sign) b.getState();
         if(sign.getLine(0).equals("§6ValkyaAP"))
             if(event.getPlayer().isOp())
-                ChunkManager.deleteChunk(b.getChunk(), event.getPlayer());
+                ChunkManager.noReverseChunk(b.getChunk());
             else
                 event.setCancelled(true);
     }
@@ -95,9 +99,9 @@ public class SignListener implements Listener {
     public void onClick(PlayerInteractEvent event){
         if(event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if(event.getClickedBlock().getType() == Material.SIGN_POST || event.getClickedBlock().getType() == Material.WALL_SIGN){
-                System.out.println(ConfigBuilder.getBoolean("isOpen"));
-                if(!ConfigBuilder.getBoolean("isOpen")){
-                    event.getPlayer().sendMessage(ValkyaClaims.getPREFIX() + " §eUnClaim des AP - Mercredi 16H");
+                if(event.getClickedBlock().getWorld().getBlockAt(event.getClickedBlock().getLocation().subtract(0,1,0)).getType() != Material.BEDROCK) return;
+                 if(!ConfigBuilder.getBoolean("isOpen")){
+                    event.getPlayer().sendMessage(ValkyaClaims.getPREFIX() + " §eUnClaim des AP - Mercredi 15H");
                     return;
                 }
 
