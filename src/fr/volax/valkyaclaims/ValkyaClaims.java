@@ -1,5 +1,6 @@
 package fr.volax.valkyaclaims;
 
+import fr.volax.volaxapi.tool.database.Database;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -12,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class ValkyaClaims extends JavaPlugin {
     private static ValkyaClaims instance;
     public static Economy economy;
+    public Database sql;
 
     private static final String PREFIX = "§6Valkya »";
 
@@ -20,10 +22,14 @@ public class ValkyaClaims extends JavaPlugin {
         if(!setupEconomy()) Bukkit.shutdown();
         instance = this;
 
-        new CommandClaims("claims");
-        Bukkit.getPluginManager().registerEvents(new SignListener(), instance);
+        ChunkManager.createAPFaction();
 
-        ConfigBuilder.configs.getConfig("chunks.yml").saveDefaultConfig();
+        Bukkit.getPluginManager().registerEvents(new SignListener(), instance);
+        new APCommand("ap");
+        saveDefaultConfig();
+
+        sql = new Database("jdbc:mysql://", ConfigBuilder.getString("sql.host"), ConfigBuilder.getString("sql.database"), ConfigBuilder.getString("sql.user"), ConfigBuilder.getString("sql.pass"));
+        sql.connection();
     }
 
     public static ValkyaClaims getInstance() {

@@ -19,5 +19,6 @@
     <orderEntry type="library" name="spigot" level="project" />
     <orderEntry type="library" name="Vault-1.4.1" level="project" />
     <orderEntry type="library" name="FactionsUUID" level="project" />
+    <orderEntry type="library" name="VolaxAPI" level="project" />
   </component>
 </module>

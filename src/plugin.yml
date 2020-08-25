@@ -1,8 +1,8 @@
 name: ValkyaClaims
 main: fr.volax.valkyaclaims.ValkyaClaims
-version: 1.0.03
+version: 1.0.04
 depend: [Vault, Factions]
 description: Valkya Claims for Valkya about AP and Faction Houses
 commands:
-  claims:
-    description: "Commande des claims"
+  ap:
+    description: "Commande des AP's"
